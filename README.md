@@ -416,14 +416,153 @@ telco-customer-churn-preprocessing/
 |   |-- Virtual_InternWeek1.ipynb
 |   |-- Virtual_InternWeek2.ipynb
 |   `-- Virtual_InternWeek3.ipynb
+    -- Virtual_InternWeek4.ipynb
 |
 |-- data/
 |   `-- WA_Fn-UseC_-Telco-Customer-Churn.csv
 |
 |-- report/
-|   |-- Virtual_InternWeek1.docx
-|   |-- Virtual_InternWeek2.docx
-|   `-- Virtual_InternWeek3.docx
+|   |-- Week1.docx
+|   |-- Week2.docx
+|   `-- Week3.docx
+    `--Week4.docx
 |
 `-- outputs/
     `-- week3_graphs/
+
+
+# Week 4 - Advanced Model Evaluation, Hyperparameter Tuning and Reporting
+
+## Objectives
+
+The objective of Week 4 was to perform advanced evaluation of the Decision Tree model, optimize its hyperparameters, compare the tuned model with the baseline model, and document the complete modeling lifecycle.
+
+The work focused on:
+
+- Five-fold Stratified Cross-Validation
+- Detailed performance metric analysis
+- Hyperparameter tuning using Grid Search
+- Optimization of Decision Tree parameters
+- Baseline vs tuned model comparison
+- Confusion Matrix analysis
+- ROC Curve analysis
+- Precision-Recall Curve analysis
+- Cross-validation stability analysis
+- Business interpretation
+- Model limitations
+- Future recommendations
+- Final project reporting
+
+## Advanced Evaluation Workflow
+
+1. Review the Week 3 baseline Decision Tree model.
+2. Apply five-fold Stratified Cross-Validation.
+3. Evaluate Accuracy, Precision, Recall, F1-score, and ROC-AUC.
+4. Define a Decision Tree hyperparameter search space.
+5. Apply Grid Search using five-fold cross-validation.
+6. Evaluate 50 hyperparameter combinations.
+7. Perform a total of 250 model fits.
+8. Select the best configuration based on F1-score.
+9. Train the final tuned Decision Tree.
+10. Evaluate the tuned model on the held-out test set.
+11. Compare baseline and tuned models.
+12. Analyze confusion matrices.
+13. Compare ROC curves.
+14. Compare Precision-Recall curves.
+15. Perform final business and model interpretation.
+
+## Baseline Cross-Validation
+
+Five-fold Stratified Cross-Validation was used to evaluate the stability of the baseline Decision Tree.
+
+| Metric | Mean | Standard Deviation |
+|---|---:|---:|
+| Accuracy | 0.7476 | 0.0147 |
+| Precision | 0.5173 | 0.0198 |
+| Recall | 0.7732 | 0.0300 |
+| F1-score | 0.6193 | 0.0114 |
+| ROC-AUC | 0.8276 | 0.0131 |
+
+The relatively small standard deviations indicate that the baseline model showed reasonably stable performance across the five folds.
+
+## Hyperparameter Tuning
+
+Grid Search was selected as the hyperparameter tuning strategy because it systematically evaluates predefined combinations of model parameters.
+
+The following Decision Tree parameters were optimized:
+
+- `criterion`
+- `max_depth`
+- `max_features`
+- `min_samples_split`
+- `min_samples_leaf`
+- `class_weight`
+
+A total of **50 hyperparameter combinations** were evaluated using **5-fold cross-validation**.
+
+Therefore:
+
+**50 combinations × 5 folds = 250 model fits**
+
+The primary optimization metric was **F1-score**, as it provides a balance between Precision and Recall.
+
+## Best Hyperparameters
+
+The Grid Search process identified the following configuration as the best combination:
+
+| Hyperparameter | Selected Value |
+|---|---|
+| Criterion | **Gini** |
+| Maximum Depth | **4** |
+| Maximum Features | **log2** |
+| Minimum Samples Split | **40** |
+| Minimum Samples Leaf | **15** |
+| Class Weight | **Balanced** |
+
+### Best Cross-Validation Result
+
+**Best Cross-Validation F1-score: 0.6166**
+
+The selected configuration produces a relatively constrained Decision Tree. The maximum depth of four limits tree complexity, while the minimum sample requirements prevent the tree from creating overly small branches.
+
+The `balanced` class-weight setting gives additional importance to the minority churn class.
+
+## Tuned Decision Tree Performance
+
+The tuned Decision Tree was evaluated on the same held-out test set of **1,409 records** used for evaluating the baseline model.
+
+| Metric | Baseline | Tuned |
+|---|---:|---:|
+| Accuracy | 0.7516 | 0.7197 |
+| Precision | 0.5220 | 0.4825 |
+| Recall | 0.7620 | **0.7727** |
+| F1-score | **0.6196** | 0.5940 |
+| ROC-AUC | **0.8353** | 0.8016 |
+
+The tuned model achieved a slightly higher recall than the baseline model, increasing from **76.20% to 77.27%**.
+
+However, Accuracy, Precision, F1-score, and ROC-AUC decreased after tuning.
+
+## Performance Change
+
+| Metric | Baseline | Tuned | Change |
+|---|---:|---:|---:|
+| Accuracy | 0.7516 | 0.7197 | -0.0319 |
+| Precision | 0.5220 | 0.4825 | -0.0395 |
+| Recall | 0.7620 | 0.7727 | **+0.0107** |
+| F1-score | 0.6196 | 0.5940 | -0.0255 |
+| ROC-AUC | 0.8353 | 0.8016 | -0.0338 |
+
+The results show that hyperparameter tuning did not improve the overall performance of the Decision Tree.
+
+The primary improvement was Recall, which increased by **0.0107**. This indicates that the tuned model identified a slightly greater proportion of actual churn customers.
+
+However, this improvement came at the cost of lower Precision, Accuracy, F1-score, and ROC-AUC.
+
+## Confusion Matrix Analysis
+
+### Baseline Decision Tree
+
+```text
+[[774 261]
+ [ 89 285]]
